@@ -77,8 +77,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $technologies=Technology::all();
         $types=Type::all();
-        return view('admin.projects.edit',compact('project','types'));
+        return view('admin.projects.edit',compact('project','types','technologies'));
     }
 
     /**
@@ -100,6 +101,11 @@ class ProjectController extends Controller
             $data['cover_image']=Storage::disk('public')->put('uploads',$data['cover_image']);
         }
         $project->update($data);
+        if(isset($data['technologies'])){
+            $project->technologies()->sync($data['technologies']);
+        }else{
+            $project->technologies()->sync([]);
+        }
         return redirect()->route('admin.projects.index')->with('message',"The project '$old_name' has been updated.");
     }
 
