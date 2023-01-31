@@ -52,6 +52,9 @@ class ProjectController extends Controller
             $new_project->cover_image=Storage::disk('public')->put('uploads',$data['cover_image']);
         }
         $new_project->save();
+        if(isset($data['technologies'])){
+            $new_project->technologies()->sync($data['technologies']);
+        }
         return redirect()->route('admin.projects.index')->with('message',"The project '$new_project->name' has been created");
     }
 

@@ -47,7 +47,7 @@
     <div class="mb-3">
         <div class="mb-2">Technologies</div>
         @foreach ($technologies as $technology)
-            <input type="checkbox" class="form-check-label" name="technologies[]" id="{{$technology->slug}} {{ in_array( $technology->id, old('tags', [])) ? 'checked' : '' }}" value="{{$technology->id}}">
+            <input type="checkbox" class="form-check-label" name="technologies[]" id="{{$technology->slug}} {{ in_array( $technology->id, old('technologies', [])) ? 'checked' : '' }}" value="{{$technology->id}}">
             <label for="{{$technology->slug}}" class="form-check-label me-3">{{$technology->name}}</label>
         @endforeach
         @error('technologies[]')
