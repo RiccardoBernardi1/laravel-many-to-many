@@ -7,6 +7,16 @@
 @else
     <h3>No Type Associated</h3>
 @endif
+@if($project->technologies->isNotEmpty())
+    <h4>Technologies:</h4>
+    <ul>
+        @foreach ($project->technologies as $technology)
+            <li>{{$technology->name}}</li>
+        @endforeach
+    </ul>
+@else
+    <h4>No Technology</h4>
+@endif
 @if($project->cover_image)
     <img src="{{asset("storage/$project->cover_image")}}" alt="{{$project->name}}" class="w-25">
 @endif
