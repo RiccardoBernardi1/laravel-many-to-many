@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Technology;
 use App\Http\Requests\StoreTechnologyRequest;
 use App\Http\Requests\UpdateTechnologyRequest;
+use Illuminate\Support\Str;
 
 class TechnologyController extends Controller
 {
@@ -15,7 +16,8 @@ class TechnologyController extends Controller
      */
     public function index()
     {
-        //
+        $technologies=Technology::all();
+        return view('admin.technologies.index',compact('technologies'));
     }
 
     /**
@@ -25,7 +27,7 @@ class TechnologyController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.technologies.create');
     }
 
     /**
@@ -36,7 +38,12 @@ class TechnologyController extends Controller
      */
     public function store(StoreTechnologyRequest $request)
     {
-        //
+        $data=$request->validated();
+        $new_technology= new Technology();
+        $new_technology->fill($data);
+        $new_technology->slug=Str::slug($new_technology->name,'-');
+        $new_technology->save();
+        return redirect()->route('admin.technologies.index')->with('message',"The technologies '$new_technology->name' has been created");
     }
 
     /**
@@ -47,7 +54,7 @@ class TechnologyController extends Controller
      */
     public function show(Technology $technology)
     {
-        //
+        return view('admin.technologies.show',compact('technology'));
     }
 
     /**
@@ -58,7 +65,7 @@ class TechnologyController extends Controller
      */
     public function edit(Technology $technology)
     {
-        //
+        return view('admin.technologies.edit',compact('technology'));
     }
 
     /**
@@ -70,7 +77,11 @@ class TechnologyController extends Controller
      */
     public function update(UpdateTechnologyRequest $request, Technology $technology)
     {
-        //
+        $old_name=$technology->name;
+        $data=$request->validated();
+        $technology->slug = Str::slug($data['name'],'-');
+        $technology->update($data);
+        return redirect()->route('admin.technologies.index')->with('message',"The Technology '$old_name' has been updated.");
     }
 
     /**
@@ -81,6 +92,8 @@ class TechnologyController extends Controller
      */
     public function destroy(Technology $technology)
     {
-        //
+        $old_name=$technology->name;
+        $technology->delete();
+        return redirect()->route('admin.technologies.index')->with('message',"The Technology '$old_name' has been deleted.");
     }
 }
